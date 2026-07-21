@@ -14,8 +14,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
-from game import Connect4, ROWS, COLS, PLAYER1, PLAYER2
-from inference import get_ai, reload_ai, get_ai_for_difficulty, DEFAULT_CHECKPOINT
+from .game import Connect4, ROWS, COLS, PLAYER1, PLAYER2
+from .inference import get_ai, reload_ai, get_ai_for_difficulty, DEFAULT_CHECKPOINT
 
 # ---------------------------------------------------------------------------
 # Lifespan: load model once on startup

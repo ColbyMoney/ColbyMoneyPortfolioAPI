@@ -27,8 +27,8 @@ from torch.amp import GradScaler, autocast
 from torch.optim import Adam
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
-from game import Connect4, COLS
-from model import build_model, FourInARowNet
+from .game import Connect4, COLS
+from .model import build_model, FourInARowNet
 
 # ---------------------------------------------------------------------------
 # Hyper-parameters

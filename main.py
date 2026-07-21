@@ -1,0 +1,1 @@
+from ai_four_in_a_row.main import app
