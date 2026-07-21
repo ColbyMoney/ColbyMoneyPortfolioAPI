@@ -1,0 +1,217 @@
+2026-07-19 15:58:13  INFO   [15:58:13] Log file: logs\training_log_20260719_155813.txt
+2026-07-19 15:58:13  INFO   [15:58:13] Training on: cuda
+2026-07-19 15:58:13  INFO   [15:58:13] GPU: NVIDIA GeForce RTX 4070 Ti
+2026-07-19 15:58:19  INFO   [15:58:19] Resumed  | total_games=11000 | starting iteration 12/100
+2026-07-19 15:58:19  INFO   
+[15:58:19] === Iteration 12/100 | total games so far: 11000 ===
+2026-07-19 15:58:19  INFO   [15:58:19] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 16:35:51  INFO   [16:35:51] Self-play done | 34505 experiences | buffer=34505 | 2251.8s  (2.25s/game)
+2026-07-19 16:35:57  INFO   [16:35:57] Training done | avg_loss=0.9145 | steps=335 | 5.6s
+2026-07-19 16:35:57  INFO   [16:35:57] Saved → models\ai-four-in-a-row-model-iteration-v3-12000.pt
+2026-07-19 16:35:57  INFO   [16:35:57] Iteration 12 done | 2257.4s | ETA 3310.9 min
+2026-07-19 16:35:57  INFO   
+[16:35:57] === Iteration 13/100 | total games so far: 12000 ===
+2026-07-19 16:35:57  INFO   [16:35:57] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 17:12:06  INFO   [17:12:06] Self-play done | 34216 experiences | buffer=50000 | 2169.5s  (2.17s/game)
+2026-07-19 17:12:11  INFO   [17:12:11] Training done | avg_loss=0.9028 | steps=330 | 4.7s
+2026-07-19 17:12:11  INFO   [17:12:11] Saved → models\ai-four-in-a-row-model-iteration-v3-13000.pt
+2026-07-19 17:12:11  INFO   [17:12:11] Iteration 13 done | 2174.2s | ETA 3212.9 min
+2026-07-19 17:12:11  INFO   
+[17:12:11] === Iteration 14/100 | total games so far: 13000 ===
+2026-07-19 17:12:11  INFO   [17:12:11] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 17:50:11  INFO   [17:50:11] Self-play done | 35143 experiences | buffer=50000 | 2279.8s  (2.28s/game)
+2026-07-19 17:50:16  INFO   [17:50:16] Training done | avg_loss=0.8775 | steps=340 | 5.5s
+2026-07-19 17:50:16  INFO   [17:50:16] Saved → models\ai-four-in-a-row-model-iteration-v3-14000.pt
+2026-07-19 17:50:16  INFO   [17:50:16] Iteration 14 done | 2285.3s | ETA 3209.2 min
+2026-07-19 17:50:16  INFO   
+[17:50:16] === Iteration 15/100 | total games so far: 14000 ===
+2026-07-19 17:50:16  INFO   [17:50:16] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 18:31:18  INFO   [18:31:18] Self-play done | 35264 experiences | buffer=50000 | 2461.8s  (2.46s/game)
+2026-07-19 18:31:23  INFO   [18:31:23] Training done | avg_loss=0.8404 | steps=340 | 4.9s
+2026-07-19 18:31:23  INFO   [18:31:23] Saved → models\ai-four-in-a-row-model-iteration-v3-15000.pt
+2026-07-19 18:31:23  INFO   [18:31:23] Iteration 15 done | 2466.7s | ETA 3252.5 min
+2026-07-19 18:31:23  INFO   
+[18:31:23] === Iteration 16/100 | total games so far: 15000 ===
+2026-07-19 18:31:23  INFO   [18:31:23] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 19:21:17  INFO   [19:21:17] Self-play done | 35043 experiences | buffer=50000 | 2994.3s  (2.99s/game)
+2026-07-19 19:21:25  INFO   [19:21:25] Training done | avg_loss=0.8189 | steps=340 | 7.3s
+2026-07-19 19:21:25  INFO   [19:21:25] Saved → models\ai-four-in-a-row-model-iteration-v3-16000.pt
+2026-07-19 19:21:25  INFO   [19:21:25] Iteration 16 done | 3001.6s | ETA 3411.9 min
+2026-07-19 19:21:25  INFO   
+[19:21:25] === Iteration 17/100 | total games so far: 16000 ===
+2026-07-19 19:21:25  INFO   [19:21:25] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 20:29:06  INFO   [20:29:06] Self-play done | 35830 experiences | buffer=50000 | 4061.4s  (4.06s/game)
+2026-07-19 20:29:13  INFO   [20:29:13] Training done | avg_loss=0.7837 | steps=345 | 7.3s
+2026-07-19 20:29:13  INFO   [20:29:13] Saved → models\ai-four-in-a-row-model-iteration-v3-17000.pt
+2026-07-19 20:29:13  INFO   [20:29:13] Iteration 17 done | 4068.7s | ETA 3872.4 min
+2026-07-19 20:29:13  INFO   
+[20:29:13] === Iteration 18/100 | total games so far: 17000 ===
+2026-07-19 20:29:13  INFO   [20:29:13] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 21:12:50  INFO   [21:12:50] Self-play done | 35278 experiences | buffer=50000 | 2616.6s  (2.62s/game)
+2026-07-19 21:12:55  INFO   [21:12:55] Training done | avg_loss=0.7944 | steps=340 | 5.3s
+2026-07-19 21:12:55  INFO   [21:12:55] Saved → models\ai-four-in-a-row-model-iteration-v3-18000.pt
+2026-07-19 21:12:55  INFO   [21:12:55] Iteration 18 done | 2621.9s | ETA 3948.1 min
+2026-07-19 21:12:55  INFO   
+[21:12:55] === Iteration 19/100 | total games so far: 18000 ===
+2026-07-19 21:12:55  INFO   [21:12:55] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 21:49:19  INFO   [21:49:19] Self-play done | 35843 experiences | buffer=50000 | 2183.6s  (2.18s/game)
+2026-07-19 21:49:24  INFO   [21:49:24] Training done | avg_loss=0.7717 | steps=350 | 5.0s
+2026-07-19 21:49:24  INFO   [21:49:24] Saved → models\ai-four-in-a-row-model-iteration-v3-19000.pt
+2026-07-19 21:49:24  INFO   [21:49:24] Iteration 19 done | 2188.7s | ETA 3873.8 min
+2026-07-19 21:49:24  INFO   
+[21:49:24] === Iteration 20/100 | total games so far: 19000 ===
+2026-07-19 21:49:24  INFO   [21:49:24] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 22:25:24  INFO   [22:25:24] Self-play done | 36213 experiences | buffer=50000 | 2159.9s  (2.16s/game)
+2026-07-19 22:25:30  INFO   [22:25:30] Training done | avg_loss=0.7602 | steps=350 | 5.8s
+2026-07-19 22:25:30  INFO   [22:25:30] Saved → models\ai-four-in-a-row-model-iteration-v3-20000.pt
+2026-07-19 22:25:30  INFO   [22:25:30] Iteration 20 done | 2165.7s | ETA 3745.8 min
+2026-07-19 22:25:30  INFO   
+[22:25:30] === Iteration 21/100 | total games so far: 20000 ===
+2026-07-19 22:25:30  INFO   [22:25:30] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 23:01:25  INFO   [23:01:25] Self-play done | 36463 experiences | buffer=50000 | 2155.7s  (2.16s/game)
+2026-07-19 23:01:31  INFO   [23:01:31] Training done | avg_loss=0.7173 | steps=355 | 5.5s
+2026-07-19 23:01:31  INFO   [23:01:31] Saved → models\ai-four-in-a-row-model-iteration-v3-21000.pt
+2026-07-19 23:01:31  INFO   [23:01:31] Iteration 21 done | 2161.2s | ETA 3477.6 min
+2026-07-19 23:01:31  INFO   
+[23:01:31] === Iteration 22/100 | total games so far: 21000 ===
+2026-07-19 23:01:31  INFO   [23:01:31] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-19 23:42:16  INFO   [23:42:16] Self-play done | 36766 experiences | buffer=50000 | 2445.5s  (2.45s/game)
+2026-07-19 23:42:22  INFO   [23:42:22] Training done | avg_loss=0.7003 | steps=355 | 5.6s
+2026-07-19 23:42:22  INFO   [23:42:22] Saved → models\ai-four-in-a-row-model-iteration-v3-22000.pt
+2026-07-19 23:42:22  INFO   [23:42:22] Iteration 22 done | 2451.2s | ETA 3013.1 min
+2026-07-19 23:42:22  INFO   
+[23:42:22] === Iteration 23/100 | total games so far: 22000 ===
+2026-07-19 23:42:22  INFO   [23:42:22] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 00:30:17  INFO   [00:30:17] Self-play done | 37238 experiences | buffer=50000 | 2875.0s  (2.88s/game)
+2026-07-20 00:30:23  INFO   [00:30:23] Training done | avg_loss=0.6719 | steps=360 | 6.2s
+2026-07-20 00:30:23  INFO   [00:30:23] Saved → models\ai-four-in-a-row-model-iteration-v3-23000.pt
+2026-07-20 00:30:23  INFO   [00:30:23] Iteration 23 done | 2881.2s | ETA 3041.0 min
+2026-07-20 00:30:23  INFO   
+[00:30:23] === Iteration 24/100 | total games so far: 23000 ===
+2026-07-20 00:30:23  INFO   [00:30:23] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 01:10:12  INFO   [01:10:12] Self-play done | 37378 experiences | buffer=50000 | 2388.8s  (2.39s/game)
+2026-07-20 01:10:18  INFO   [01:10:18] Training done | avg_loss=0.6764 | steps=365 | 5.9s
+2026-07-20 01:10:18  INFO   [01:10:18] Saved → models\ai-four-in-a-row-model-iteration-v3-24000.pt
+2026-07-20 01:10:18  INFO   [01:10:18] Iteration 24 done | 2394.8s | ETA 3053.7 min
+2026-07-20 01:10:18  INFO   
+[01:10:18] === Iteration 25/100 | total games so far: 24000 ===
+2026-07-20 01:10:18  INFO   [01:10:18] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 01:51:02  INFO   [01:51:02] Self-play done | 36536 experiences | buffer=50000 | 2444.2s  (2.44s/game)
+2026-07-20 01:51:08  INFO   [01:51:08] Training done | avg_loss=0.7080 | steps=355 | 5.7s
+2026-07-20 01:51:08  INFO   [01:51:08] Saved → models\ai-four-in-a-row-model-iteration-v3-25000.pt
+2026-07-20 01:51:08  INFO   [01:51:08] Iteration 25 done | 2449.9s | ETA 3084.6 min
+2026-07-20 01:51:08  INFO   
+[01:51:08] === Iteration 26/100 | total games so far: 25000 ===
+2026-07-20 01:51:08  INFO   [01:51:08] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 02:32:14  INFO   [02:32:14] Self-play done | 36318 experiences | buffer=50000 | 2466.2s  (2.47s/game)
+2026-07-20 02:32:20  INFO   [02:32:20] Training done | avg_loss=0.7163 | steps=350 | 5.8s
+2026-07-20 02:32:20  INFO   [02:32:20] Saved → models\ai-four-in-a-row-model-iteration-v3-26000.pt
+2026-07-20 02:32:20  INFO   [02:32:20] Iteration 26 done | 2472.0s | ETA 3120.1 min
+2026-07-20 02:32:20  INFO   
+[02:32:20] === Iteration 27/100 | total games so far: 26000 ===
+2026-07-20 02:32:20  INFO   [02:32:20] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 03:12:48  INFO   [03:12:48] Self-play done | 36511 experiences | buffer=50000 | 2427.6s  (2.43s/game)
+2026-07-20 03:12:53  INFO   [03:12:53] Training done | avg_loss=0.7079 | steps=355 | 5.2s
+2026-07-20 03:12:53  INFO   [03:12:53] Saved → models\ai-four-in-a-row-model-iteration-v3-27000.pt
+2026-07-20 03:12:53  INFO   [03:12:53] Iteration 27 done | 2432.8s | ETA 3073.5 min
+2026-07-20 03:12:53  INFO   
+[03:12:53] === Iteration 28/100 | total games so far: 27000 ===
+2026-07-20 03:12:53  INFO   [03:12:53] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 03:53:42  INFO   [03:53:42] Self-play done | 36952 experiences | buffer=50000 | 2449.2s  (2.45s/game)
+2026-07-20 03:53:48  INFO   [03:53:48] Training done | avg_loss=0.6711 | steps=360 | 6.0s
+2026-07-20 03:53:48  INFO   [03:53:48] Saved → models\ai-four-in-a-row-model-iteration-v3-28000.pt
+2026-07-20 03:53:48  INFO   [03:53:48] Iteration 28 done | 2455.1s | ETA 2929.1 min
+2026-07-20 03:53:48  INFO   
+[03:53:48] === Iteration 29/100 | total games so far: 28000 ===
+2026-07-20 03:53:48  INFO   [03:53:48] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 04:34:00  INFO   [04:34:00] Self-play done | 36896 experiences | buffer=50000 | 2412.2s  (2.41s/game)
+2026-07-20 04:34:06  INFO   [04:34:06] Training done | avg_loss=0.6430 | steps=360 | 5.8s
+2026-07-20 04:34:06  INFO   [04:34:06] Saved → models\ai-four-in-a-row-model-iteration-v3-29000.pt
+2026-07-20 04:34:06  INFO   [04:34:06] Iteration 29 done | 2418.1s | ETA 2893.9 min
+2026-07-20 04:34:06  INFO   
+[04:34:06] === Iteration 30/100 | total games so far: 29000 ===
+2026-07-20 04:34:06  INFO   [04:34:06] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 05:14:02  INFO   [05:14:02] Self-play done | 36859 experiences | buffer=50000 | 2395.7s  (2.40s/game)
+2026-07-20 05:14:07  INFO   [05:14:07] Training done | avg_loss=0.6397 | steps=355 | 5.8s
+2026-07-20 05:14:07  INFO   [05:14:07] Saved → models\ai-four-in-a-row-model-iteration-v3-30000.pt
+2026-07-20 05:14:07  INFO   [05:14:07] Iteration 30 done | 2401.5s | ETA 2841.9 min
+2026-07-20 05:14:07  INFO   
+[05:14:07] === Iteration 31/100 | total games so far: 30000 ===
+2026-07-20 05:14:07  INFO   [05:14:07] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 05:54:40  INFO   [05:54:40] Self-play done | 37473 experiences | buffer=50000 | 2432.1s  (2.43s/game)
+2026-07-20 05:54:45  INFO   [05:54:45] Training done | avg_loss=0.6272 | steps=365 | 5.2s
+2026-07-20 05:54:45  INFO   [05:54:45] Saved → models\ai-four-in-a-row-model-iteration-v3-31000.pt
+2026-07-20 05:54:45  INFO   [05:54:45] Iteration 31 done | 2437.2s | ETA 2793.3 min
+2026-07-20 05:54:45  INFO   
+[05:54:45] === Iteration 32/100 | total games so far: 31000 ===
+2026-07-20 05:54:45  INFO   [05:54:45] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 06:34:29  INFO   [06:34:29] Self-play done | 37581 experiences | buffer=50000 | 2384.2s  (2.38s/game)
+2026-07-20 06:34:35  INFO   [06:34:35] Training done | avg_loss=0.5867 | steps=365 | 6.1s
+2026-07-20 06:34:35  INFO   [06:34:35] Saved → models\ai-four-in-a-row-model-iteration-v3-32000.pt
+2026-07-20 06:34:35  INFO   [06:34:35] Iteration 32 done | 2390.3s | ETA 2743.2 min
+2026-07-20 06:34:35  INFO   
+[06:34:35] === Iteration 33/100 | total games so far: 32000 ===
+2026-07-20 06:34:35  INFO   [06:34:35] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 07:13:17  INFO   [07:13:17] Self-play done | 37805 experiences | buffer=50000 | 2322.2s  (2.32s/game)
+2026-07-20 07:13:23  INFO   [07:13:23] Training done | avg_loss=0.5401 | steps=365 | 5.8s
+2026-07-20 07:13:23  INFO   [07:13:23] Saved → models\ai-four-in-a-row-model-iteration-v3-33000.pt
+2026-07-20 07:13:23  INFO   [07:13:23] Iteration 33 done | 2328.0s | ETA 2674.4 min
+2026-07-20 07:13:23  INFO   
+[07:13:23] === Iteration 34/100 | total games so far: 33000 ===
+2026-07-20 07:13:23  INFO   [07:13:23] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 07:52:43  INFO   [07:52:43] Self-play done | 38248 experiences | buffer=50000 | 2360.1s  (2.36s/game)
+2026-07-20 07:52:49  INFO   [07:52:49] Training done | avg_loss=0.5349 | steps=370 | 6.1s
+2026-07-20 07:52:49  INFO   [07:52:49] Saved → models\ai-four-in-a-row-model-iteration-v3-34000.pt
+2026-07-20 07:52:49  INFO   [07:52:49] Iteration 34 done | 2366.2s | ETA 2623.1 min
+2026-07-20 07:52:49  INFO   
+[07:52:49] === Iteration 35/100 | total games so far: 34000 ===
+2026-07-20 07:52:49  INFO   [07:52:49] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 08:29:03  INFO   [08:29:03] Self-play done | 38374 experiences | buffer=50000 | 2173.9s  (2.17s/game)
+2026-07-20 08:29:09  INFO   [08:29:09] Training done | avg_loss=0.5341 | steps=370 | 5.8s
+2026-07-20 08:29:09  INFO   [08:29:09] Saved → models\ai-four-in-a-row-model-iteration-v3-35000.pt
+2026-07-20 08:29:09  INFO   [08:29:09] Iteration 35 done | 2179.8s | ETA 2535.3 min
+2026-07-20 08:29:09  INFO   
+[08:29:09] === Iteration 36/100 | total games so far: 35000 ===
+2026-07-20 08:29:09  INFO   [08:29:09] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 09:05:50  INFO   [09:05:50] Self-play done | 37791 experiences | buffer=50000 | 2200.7s  (2.20s/game)
+2026-07-20 09:05:55  INFO   [09:05:55] Training done | avg_loss=0.5015 | steps=365 | 5.5s
+2026-07-20 09:05:55  INFO   [09:05:55] Saved → models\ai-four-in-a-row-model-iteration-v3-36000.pt
+2026-07-20 09:05:55  INFO   [09:05:55] Iteration 36 done | 2206.2s | ETA 2447.0 min
+2026-07-20 09:05:55  INFO   
+[09:05:55] === Iteration 37/100 | total games so far: 36000 ===
+2026-07-20 09:05:55  INFO   [09:05:55] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 09:45:18  INFO   [09:45:18] Self-play done | 38259 experiences | buffer=50000 | 2363.1s  (2.36s/game)
+2026-07-20 09:45:24  INFO   [09:45:24] Training done | avg_loss=0.4902 | steps=370 | 5.7s
+2026-07-20 09:45:24  INFO   [09:45:24] Saved → models\ai-four-in-a-row-model-iteration-v3-37000.pt
+2026-07-20 09:45:24  INFO   [09:45:24] Iteration 37 done | 2368.8s | ETA 2404.3 min
+2026-07-20 09:45:24  INFO   
+[09:45:24] === Iteration 38/100 | total games so far: 37000 ===
+2026-07-20 09:45:24  INFO   [09:45:24] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 10:23:41  INFO   [10:23:41] Self-play done | 37875 experiences | buffer=50000 | 2297.0s  (2.30s/game)
+2026-07-20 10:23:47  INFO   [10:23:47] Training done | avg_loss=0.4747 | steps=365 | 5.4s
+2026-07-20 10:23:47  INFO   [10:23:47] Saved → models\ai-four-in-a-row-model-iteration-v3-38000.pt
+2026-07-20 10:23:47  INFO   [10:23:47] Iteration 38 done | 2302.5s | ETA 2360.9 min
+2026-07-20 10:23:47  INFO   
+[10:23:47] === Iteration 39/100 | total games so far: 38000 ===
+2026-07-20 10:23:47  INFO   [10:23:47] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 11:02:03  INFO   [11:02:03] Self-play done | 38783 experiences | buffer=50000 | 2296.8s  (2.30s/game)
+2026-07-20 11:02:10  INFO   [11:02:10] Training done | avg_loss=0.4544 | steps=375 | 6.6s
+2026-07-20 11:02:10  INFO   [11:02:10] Saved → models\ai-four-in-a-row-model-iteration-v3-39000.pt
+2026-07-20 11:02:10  INFO   [11:02:10] Iteration 39 done | 2303.4s | ETA 2310.0 min
+2026-07-20 11:02:10  INFO   
+[11:02:10] === Iteration 40/100 | total games so far: 39000 ===
+2026-07-20 11:02:10  INFO   [11:02:10] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 11:39:38  INFO   [11:39:38] Self-play done | 38273 experiences | buffer=50000 | 2248.2s  (2.25s/game)
+2026-07-20 11:39:44  INFO   [11:39:44] Training done | avg_loss=0.4733 | steps=370 | 6.1s
+2026-07-20 11:39:44  INFO   [11:39:44] Saved → models\ai-four-in-a-row-model-iteration-v3-40000.pt
+2026-07-20 11:39:44  INFO   [11:39:44] Iteration 40 done | 2254.3s | ETA 2287.0 min
+2026-07-20 11:39:44  INFO   
+[11:39:44] === Iteration 41/100 | total games so far: 40000 ===
+2026-07-20 11:39:44  INFO   [11:39:44] Self-play  1000 games | 250 sims/move | 200 parallel
+2026-07-20 12:17:14  INFO   [12:17:14] Self-play done | 38450 experiences | buffer=50000 | 2249.3s  (2.25s/game)
+2026-07-20 12:17:19  INFO   [12:17:19] Training done | avg_loss=0.4590 | steps=375 | 5.6s
+2026-07-20 12:17:19  INFO   [12:17:19] Saved → models\ai-four-in-a-row-model-iteration-v3-41000.pt
+2026-07-20 12:17:19  INFO   [12:17:19] Iteration 41 done | 2254.9s | ETA 2258.5 min
+2026-07-20 12:17:19  INFO   
+[12:17:19] === Iteration 42/100 | total games so far: 41000 ===
+2026-07-20 12:17:19  INFO   [12:17:19] Self-play  1000 games | 250 sims/move | 200 parallel

@@ -7,7 +7,7 @@ PLAYER1 = 1
 PLAYER2 = 2
 
 
-class FourInARow:
+class Connect4:
     def __init__(self):
         self.board = np.zeros((ROWS, COLS), dtype=np.int8)
         self.current_player = PLAYER1
@@ -15,7 +15,7 @@ class FourInARow:
         self.winner = None
 
     def copy(self):
-        clone = FourInARow()
+        clone = Connect4()
         clone.board = self.board.copy()
         clone.current_player = self.current_player
         clone.game_over = self.game_over

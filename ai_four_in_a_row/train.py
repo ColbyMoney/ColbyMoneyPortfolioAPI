@@ -18,7 +18,6 @@ import random
 import time
 from collections import deque
 from datetime import datetime
-from pathlib import Path
 from typing import List, Optional, Tuple
 
 import numpy as np
@@ -28,8 +27,8 @@ from torch.amp import GradScaler, autocast
 from torch.optim import Adam
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
-from .game import FourInARow, COLS
-from .model import build_model, FourInARowNet
+from game import Connect4, COLS
+from model import build_model, FourInARowNet
 
 # ---------------------------------------------------------------------------
 # Hyper-parameters
@@ -46,8 +45,8 @@ LR                 = 1e-3
 L2_REG             = 1e-4
 C_PUCT             = 1.5
 TEMPERATURE_MOVES  = 20
-CHECKPOINT_DIR     = Path(__file__).parent / "models"
-CHECKPOINT_PATH    = CHECKPOINT_DIR / "ai_four_in_a_row_model_iteration_current.pt"
+CHECKPOINT_DIR     = "models"
+CHECKPOINT_PATH    = os.path.join(CHECKPOINT_DIR, "ai_four_in_a_row_model_iteration_current.pt")
 
 # GPU performance flags (no-op on CPU)
 if DEVICE == "cuda":
@@ -91,7 +90,7 @@ class MCTSNode:
     __slots__ = ("game", "parent", "move", "children", "visit_count",
                  "value_sum", "prior", "is_expanded")
 
-    def __init__(self, game: FourInARow, parent=None, move=None, prior: float = 0.0):
+    def __init__(self, game: Connect4, parent=None, move=None, prior: float = 0.0):
         self.game        = game
         self.parent      = parent
         self.move        = move
@@ -148,7 +147,7 @@ def _expand_node(node: MCTSNode, policy_logits: torch.Tensor, value: float) -> N
 
 
 def batched_mcts(
-    net: FourInARowNet, games: List[FourInARow], num_sims: int
+    net: FourInARowNet, games: List[Connect4], num_sims: int
 ) -> List[np.ndarray]:
     """
     Run MCTS for multiple games simultaneously.
@@ -212,7 +211,7 @@ def self_play_batch(net: FourInARowNet, num_games: int) -> List[Experience]:
 
     while games_completed < num_games:
         batch_size  = min(PARALLEL_GAMES, num_games - games_completed)
-        games       = [FourInARow() for _ in range(batch_size)]
+        games       = [Connect4() for _ in range(batch_size)]
         histories: List[List[Tuple]] = [[] for _ in range(batch_size)]
         move_counts = [0] * batch_size
         active      = list(range(batch_size))
@@ -300,9 +299,11 @@ def train_step(
 
 
 def save_iteration_checkpoint(net: FourInARowNet, total_games: int) -> None:
-    CHECKPOINT_DIR.mkdir(exist_ok=True)
+    os.makedirs(CHECKPOINT_DIR, exist_ok=True)
     state     = {"total_games": total_games, "model_state": net.state_dict()}
-    iter_path = CHECKPOINT_DIR / f"ai_four_in_a_row_model_iteration_v3_{total_games}.pt"
+    iter_path = os.path.join(
+        CHECKPOINT_DIR, f"ai_four_in_a_row_model_iteration_v3_{total_games}.pt"
+    )
     torch.save(state, iter_path)
     torch.save(state, CHECKPOINT_PATH)
     lprint(f"{ts()} Saved → {iter_path}")
@@ -321,11 +322,11 @@ def find_latest_checkpoint() -> tuple[str, int] | None:
     or None if the directory doesn't exist or contains no valid files.
     Ignores the iteration-0 seed checkpoint (no training done yet).
     """
-    if not CHECKPOINT_DIR.is_dir():
+    if not os.path.isdir(CHECKPOINT_DIR):
         return None
 
     best_games = 0
-    best_path: Path | None = None
+    best_path: str | None = None
 
     for fname in os.listdir(CHECKPOINT_DIR):
         m = _CKPT_RE.match(fname)
@@ -333,7 +334,7 @@ def find_latest_checkpoint() -> tuple[str, int] | None:
             games = int(m.group(1))
             if games > best_games:
                 best_games = games
-                best_path  = CHECKPOINT_DIR / fname
+                best_path  = os.path.join(CHECKPOINT_DIR, fname)
 
     return (best_path, best_games) if best_path else None
 
@@ -344,9 +345,12 @@ def main() -> None:
     global _logger
 
     # ── Logging setup (file only — terminal handled by print) ────────────────
-    log_dir  = Path(__file__).parent / "logs"
-    log_dir.mkdir(exist_ok=True)
-    log_file = log_dir / f"training_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    log_dir  = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+    log_file = os.path.join(
+        log_dir,
+        f"training_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+    )
     _logger = logging.getLogger("train")
     _logger.setLevel(logging.DEBUG)
     _logger.propagate = False          # don't duplicate to root logger

@@ -1,28 +1,42 @@
-"""Connect 4 AI router — all endpoints for the Connect 4 game."""
+"""FastAPI application — Connect 4 AI endpoints.
+
+Start the server:
+    uvicorn main:app --reload
+"""
 
 import os
 import threading
 import time as _time
 from contextlib import asynccontextmanager
-from pathlib import Path
 from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
-from .game import FourInARow, ROWS, COLS, PLAYER1, PLAYER2
-from .inference import get_ai, reload_ai, get_ai_for_difficulty, DEFAULT_CHECKPOINT
+from game import Connect4, ROWS, COLS, PLAYER1, PLAYER2
+from inference import get_ai, reload_ai, get_ai_for_difficulty, DEFAULT_CHECKPOINT
 
 # ---------------------------------------------------------------------------
-# Lifespan: load model once on startup, watch for updates
+# Lifespan: load model once on startup
 # ---------------------------------------------------------------------------
-_stop_event = threading.Event()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Warm up — this loads the checkpoint and runs one forward pass
+    try:
+        get_ai()
+    except FileNotFoundError as exc:
+        # Server still starts; /move will return 503 until a model exists
+        print(f"[WARNING] {exc}")
 
+    # Background thread: reload the model whenever the checkpoint file changes.
+    # Training saves a new checkpoint after every iteration, so the API will
+    # automatically serve the latest weights within ~10 seconds.
+    stop_event = threading.Event()
 
-def _start_checkpoint_watcher() -> threading.Thread:
-    def _watcher():
+    def _checkpoint_watcher():
         last_mtime = 0.0
-        while not _stop_event.is_set():
+        while not stop_event.is_set():
             try:
                 mtime = os.path.getmtime(DEFAULT_CHECKPOINT)
                 if mtime > last_mtime and last_mtime > 0:
@@ -32,41 +46,34 @@ def _start_checkpoint_watcher() -> threading.Thread:
                 last_mtime = mtime
             except FileNotFoundError:
                 pass
-            _stop_event.wait(timeout=10)
+            stop_event.wait(timeout=10)
 
-    t = threading.Thread(target=_watcher, daemon=True)
-    t.start()
-    return t
+    watcher = threading.Thread(target=_checkpoint_watcher, daemon=True)
+    watcher.start()
 
+    yield
 
-def startup() -> None:
-    try:
-        get_ai()
-    except FileNotFoundError as exc:
-        print(f"[WARNING] {exc}")
-
-    _stop_event.clear()
-    _start_checkpoint_watcher()
+    stop_event.set()
 
 
-def shutdown() -> None:
-    _stop_event.set()
+app = FastAPI(
+    title="AI Four-in-a-Row API",
+    description="Connect 4 powered by a self-play trained neural network + MCTS.",
+    version="1.0.0",
+    lifespan=lifespan,
+)
 
-
-# ---------------------------------------------------------------------------
-# Router
-# ---------------------------------------------------------------------------
-router = APIRouter(on_startup=[startup], on_shutdown=[shutdown])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200", "https://colbymoney.com"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # ---------------------------------------------------------------------------
 # Schemas
 # ---------------------------------------------------------------------------
-class HealthResponse(BaseModel):
-    status: str
-    model_loaded: bool
-
-
 class BoardState(BaseModel):
     """
     board: 6×7 grid, row 0 = top.
@@ -91,15 +98,43 @@ class BoardState(BaseModel):
         for i, row in enumerate(v):
             if len(row) != COLS:
                 raise ValueError(f"Row {i} must have {COLS} columns, got {len(row)}.")
+            for cell in row:
+                if cell not in (0, 1, 2):
+                    raise ValueError("Cell values must be 0, 1, or 2.")
         return v
 
 
 class MoveResponse(BaseModel):
-    move: int
-    probabilities: dict
-    value: float
+    move: int = Field(..., description="Recommended column (0-indexed).")
+    probabilities: dict[int, float] = Field(
+        ..., description="MCTS visit-count probabilities for each valid column."
+    )
+    value: float = Field(
+        ..., description="Position evaluation (+1 AI winning, -1 AI losing)."
+    )
     game_over: bool
     winner: Optional[int]
+
+
+class HealthResponse(BaseModel):
+    status: str
+    model_loaded: bool
+
+
+# Schema matched to the Angular AiService contract
+class AiMoveRequest(BaseModel):
+    board: List[List[int]]
+    player: int = Field(..., ge=1, le=2)
+
+    @field_validator("board")
+    @classmethod
+    def validate_board(cls, v):
+        if len(v) != ROWS:
+            raise ValueError(f"Board must have {ROWS} rows, got {len(v)}.")
+        for i, row in enumerate(v):
+            if len(row) != COLS:
+                raise ValueError(f"Row {i} must have {COLS} columns.")
+        return v
 
 
 class AiMoveResponse(BaseModel):
@@ -109,10 +144,10 @@ class AiMoveResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-def _board_from_request(data: BoardState) -> FourInARow:
+def _board_from_request(data: BoardState) -> Connect4:
     import numpy as np
 
-    game = FourInARow()
+    game = Connect4()
     game.board = np.array(data.board, dtype=np.int8)
     game.current_player = data.current_player
     return game
@@ -121,7 +156,8 @@ def _board_from_request(data: BoardState) -> FourInARow:
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
-@router.get("/health", response_model=HealthResponse, tags=["meta"])
+
+@app.get("/health", response_model=HealthResponse, tags=["meta"])
 def health():
     try:
         ai = get_ai()
@@ -131,7 +167,7 @@ def health():
     return {"status": "ok", "model_loaded": loaded}
 
 
-@router.post("/get-move", response_model=MoveResponse, tags=["game"])
+@app.post("/api/ai-four-in-a-row/get-move", response_model=MoveResponse, tags=["game"])
 def get_move(data: BoardState):
     """
     Given a board state, return the AI's recommended move plus analysis.
@@ -167,14 +203,14 @@ def get_move(data: BoardState):
     )
 
 
-@router.post("/valid-moves", tags=["game"])
+@app.post("/valid-moves", tags=["game"])
 def valid_moves(data: BoardState):
     """Return the list of columns that are legal to play."""
     game = _board_from_request(data)
     return {"valid_moves": game.get_valid_moves()}
 
 
-@router.post("/evaluate", tags=["game"])
+@app.post("/evaluate", tags=["game"])
 def evaluate(data: BoardState):
     """
     Return only the neural network's raw value estimate for the position,

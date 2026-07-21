@@ -1,5 +1,5 @@
 # Model checkpoints are saved here by train.py
-# ai-four-in-a-row-model-current.pt        ← latest checkpoint (overwritten each save)
-# ai-four-in-a-row-model-iteration-n.pt   ← versioned snapshots
+# ai_four_in_a_row_model_iteration_current.pt   ← latest checkpoint (overwritten each save)
+# ai_four_in_a_row_model_iteration_n.pt         ← versioned snapshots
 #
 # Run train.py to generate the first checkpoint before starting the API.
