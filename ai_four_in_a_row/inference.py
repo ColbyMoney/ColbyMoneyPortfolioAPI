@@ -20,13 +20,12 @@ from .model import build_model, FourInARowNet
 from .train import batched_mcts
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DEFAULT_CHECKPOINT = os.path.join("models", "ai_four_in_a_row_model_iteration_current.pt")
 DEFAULT_MCTS_SIMS = 50  # more sims at inference time for stronger play
 
 BASE_DIR = Path(__file__).parent
 MODELS_DIR = BASE_DIR / "models"
 
-DEFAULT_CHECKPOINT = MODELS_DIR / "ai_four_in_a_row_model_iteration_current.pt"
+DEFAULT_CHECKPOINT = MODELS_DIR / "ai_four_in_a_row_model_iteration_v3_41000.pt"
 
 DIFFICULTY_CHECKPOINTS: dict[str, Path] = {
     "medium":    MODELS_DIR / "ai_four_in_a_row_model_iteration_v1_45000.pt",
