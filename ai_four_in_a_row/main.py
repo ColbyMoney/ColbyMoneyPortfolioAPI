@@ -15,19 +15,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
 from .game import Connect4, ROWS, COLS, PLAYER1, PLAYER2
-from .inference import get_ai, reload_ai, get_ai_for_difficulty, DEFAULT_CHECKPOINT
+from .inference import get_ai, reload_ai, get_ai_for_difficulty, load_all_models, DEFAULT_CHECKPOINT
 
 # ---------------------------------------------------------------------------
 # Lifespan: load model once on startup
 # ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Warm up — this loads the checkpoint and runs one forward pass
-    try:
-        get_ai()
-    except FileNotFoundError as exc:
-        # Server still starts; /move will return 503 until a model exists
-        print(f"[WARNING] {exc}")
+    # Load all three difficulty models at startup so every request is served
+    # from pre-warmed weights with no first-request latency.
+    load_all_models()
 
     # Background thread: reload the model whenever the checkpoint file changes.
     # Training saves a new checkpoint after every iteration, so the API will

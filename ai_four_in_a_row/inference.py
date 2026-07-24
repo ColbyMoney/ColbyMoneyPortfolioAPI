@@ -33,7 +33,8 @@ DIFFICULTY_CHECKPOINTS: dict[str, Path] = {
     "legendary": MODELS_DIR / "ai_four_in_a_row_model_iteration_v3_41000.pt",
 }
 
-# Cache one FourInARowAI instance per difficulty so repeated API calls don't reload weights.
+# All difficulty models are lazily loaded on first request and kept for the lifetime of the
+# process.  No eviction — Python's GC handles cleanup if a reference is ever dropped.
 _ai_cache: dict[str, "FourInARowAI"] = {}
 
 class FourInARowAI:
@@ -42,32 +43,20 @@ class FourInARowAI:
         checkpoint_path: str = DEFAULT_CHECKPOINT,
         mcts_sims: int = DEFAULT_MCTS_SIMS,
     ):
+        if not os.path.exists(checkpoint_path):
+            raise FileNotFoundError(
+                f"No model checkpoint found at '{checkpoint_path}'. "
+                "Run train.py first to generate a checkpoint."
+            )
         self.checkpoint_path = checkpoint_path
         self.mcts_sims = mcts_sims
         self.net = build_model().to(DEVICE)
-        self._load(checkpoint_path)
-        self.net.eval()
-
-    def _load(self, path: str):
-        if not os.path.exists(path):
-            raise FileNotFoundError(
-                f"No model checkpoint found at '{path}'. "
-                "Run train.py first to generate a checkpoint."
-            )
-        checkpoint = torch.load(path, map_location=DEVICE, weights_only=True)
+        checkpoint = torch.load(checkpoint_path, map_location=DEVICE, weights_only=True)
         state = checkpoint.get("model_state", checkpoint)
         self.net.load_state_dict(state)
         total_games = checkpoint.get("total_games", checkpoint.get("iteration", "?"))
-        print(f"Loaded model from '{path}' (total_games={total_games})")
-
-    def _unload(self):
-        """Delete the network weights and release GPU memory."""
-        print(f"Unloading model from '{self.checkpoint_path}'")
-        del self.net
-        self.net = None  # type: ignore[assignment]
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-        print(f"Model '{self.checkpoint_path}' unloaded and cache cleared")
+        print(f"Loaded model from '{checkpoint_path}' (total_games={total_games})")
+        self.net.eval()
 
     def best_move(self, game: Connect4, use_mcts: bool) -> int:
         """
@@ -138,30 +127,23 @@ def reload_ai() -> None:
 
 
 def get_ai_for_difficulty(difficulty: str = "medium") -> FourInARowAI:
-    """Return a cached FourInARowAI for the requested difficulty level.
+    """Return the pre-loaded FourInARowAI for the requested difficulty level.
 
-    Only one model is kept in memory at a time.  When a different difficulty
-    is requested, all previously cached models are unloaded and the PyTorch
-    cache is cleared before the new model is loaded.
-
-    Falls back to the default current-model singleton when a versioned
-    checkpoint file doesn't exist yet (e.g. hard/v3 still in training).
+    All models are loaded at startup via load_all_models().  Falls back to the
+    default singleton if the requested difficulty is not in the cache.
     """
-    if difficulty in _ai_cache:
-        return _ai_cache[difficulty]
+    return _ai_cache.get(difficulty) or get_ai()
 
-    ckpt = DIFFICULTY_CHECKPOINTS.get(difficulty)
-    if ckpt is None or not os.path.exists(ckpt):
-        return get_ai()
 
-    # Evict every previously cached model before loading the new one so that
-    # only a single set of weights lives in memory at a time.
-    stale = list(_ai_cache.keys())
-    for key in stale:
-        _ai_cache[key]._unload()
-        del _ai_cache[key]
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+def load_all_models() -> None:
+    """Load every difficulty model into the cache at startup.
 
-    _ai_cache[difficulty] = FourInARowAI(ckpt, DEFAULT_MCTS_SIMS)
-    return _ai_cache[difficulty]
+    Called once from the FastAPI lifespan so all models are warm before the
+    first request arrives.  Missing checkpoint files are logged as warnings
+    rather than hard failures so the server still starts during training.
+    """
+    for difficulty, ckpt in DIFFICULTY_CHECKPOINTS.items():
+        try:
+            _ai_cache[difficulty] = FourInARowAI(ckpt, DEFAULT_MCTS_SIMS)
+        except FileNotFoundError as exc:
+            print(f"[WARNING] Could not load '{difficulty}' model: {exc}")
