@@ -60,6 +60,15 @@ class FourInARowAI:
         total_games = checkpoint.get("total_games", checkpoint.get("iteration", "?"))
         print(f"Loaded model from '{path}' (total_games={total_games})")
 
+    def _unload(self):
+        """Delete the network weights and release GPU memory."""
+        print(f"Unloading model from '{self.checkpoint_path}'")
+        del self.net
+        self.net = None  # type: ignore[assignment]
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        print(f"Model '{self.checkpoint_path}' unloaded and cache cleared")
+
     def best_move(self, game: Connect4, use_mcts: bool) -> int:
         """
         Return the column index of the best move.
@@ -131,12 +140,28 @@ def reload_ai() -> None:
 def get_ai_for_difficulty(difficulty: str = "medium") -> FourInARowAI:
     """Return a cached FourInARowAI for the requested difficulty level.
 
+    Only one model is kept in memory at a time.  When a different difficulty
+    is requested, all previously cached models are unloaded and the PyTorch
+    cache is cleared before the new model is loaded.
+
     Falls back to the default current-model singleton when a versioned
     checkpoint file doesn't exist yet (e.g. hard/v3 still in training).
     """
+    if difficulty in _ai_cache:
+        return _ai_cache[difficulty]
+
     ckpt = DIFFICULTY_CHECKPOINTS.get(difficulty)
     if ckpt is None or not os.path.exists(ckpt):
         return get_ai()
-    if difficulty not in _ai_cache:
-        _ai_cache[difficulty] = FourInARowAI(ckpt, DEFAULT_MCTS_SIMS)
+
+    # Evict every previously cached model before loading the new one so that
+    # only a single set of weights lives in memory at a time.
+    stale = list(_ai_cache.keys())
+    for key in stale:
+        _ai_cache[key]._unload()
+        del _ai_cache[key]
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    _ai_cache[difficulty] = FourInARowAI(ckpt, DEFAULT_MCTS_SIMS)
     return _ai_cache[difficulty]
