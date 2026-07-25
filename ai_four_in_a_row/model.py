@@ -1,5 +1,5 @@
 """
-Hand-written neural network for Connect 4 — no pre-built layer classes.
+AI-written neural network for Connect 4 — no pre-built layer classes.
 
 Everything is built from first principles using raw nn.Parameter weight tensors
 and explicit mathematical operations:
