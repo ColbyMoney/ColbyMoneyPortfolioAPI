@@ -64,15 +64,13 @@ for batch in range(batch_size):
         target = yb[batch, time]
         print(f"When input is {context}, the target is: {target}")
 
-print(xb)
+print(xb) # our input to the transformer
 torch.manual_seed(1337)
-
 class BigramLanguageModel(nn.Module):
     def __init__(self, vocab_size):
         super().__init__()
         # each token directly reads off the logits for the next token from a lookup table
         self.token_embedding_table = nn.Embedding(vocab_size, vocab_size)
-
     def forward(self, idx, targets=None):
         #idx and target are both (batch, time) tensor of integers
         logits = self.token_embedding_table(idx) # (batch, time, vocab_size)
@@ -84,7 +82,6 @@ class BigramLanguageModel(nn.Module):
             targets = targets.view(batch * time)
             loss = F.cross_entropy(logits, targets)
         return logits, loss
-
     def generate(self, idx, max_new_tokens):
         # idx is (batch, time) array of indices in the current context
         for _ in range(max_new_tokens):
@@ -99,10 +96,22 @@ class BigramLanguageModel(nn.Module):
             # append sampled index to the running sequence
             idx = torch.cat((idx, idx_next), dim=1) # (batch, time+1)
         return idx
-
 m = BigramLanguageModel(vocab_size)
 logits, loss = m(xb, yb)
 print(logits.shape)
 print(loss)
-
 print(decode(m.generate(idx = torch.zeros((1, 1), dtype=torch.long), max_new_tokens=100)[0].tolist()))
+
+# create a PyTorch optimizer
+optimizer = torch.optim.AdamW(m.parameters(), lr=1e-3)
+context_size = 32
+for steps in range(10000):
+    # sample a batch of data
+    xb, yb = get_batch("train")
+    # evaluate the loss
+    logits, loss = m(xb, yb)
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    optimizer.step()
+print(loss.item())
+print(decode(m.generate(idx = torch.zeros((1, 1), dtype=torch.long), max_new_tokens=500)[0].tolist()))
