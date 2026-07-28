@@ -3,6 +3,8 @@ import torch.nn as nn
 from torch.nn import functional as F
 from pathlib import Path
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
 DATA_DIR = Path(__file__).parent
 
 with open(DATA_DIR / "shakespeare.txt", 'r', encoding='utf-8') as f:
@@ -66,14 +68,21 @@ for batch in range(batch_size):
 
 print(xb) # our input to the transformer
 torch.manual_seed(1337)
+n_embd = 32
 class BigramLanguageModel(nn.Module):
-    def __init__(self, vocab_size):
+    def __init__(self):
         super().__init__()
         # each token directly reads off the logits for the next token from a lookup table
-        self.token_embedding_table = nn.Embedding(vocab_size, vocab_size)
+        self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
+        self.position_embedding_table = nn.Embedding(context_size, n_embd)
+        self.lm_head = nn.Linear(n_embd, vocab_size)
     def forward(self, idx, targets=None):
+        B, T = idx.shape
         #idx and target are both (batch, time) tensor of integers
-        logits = self.token_embedding_table(idx) # (batch, time, vocab_size)
+        tok_emb = self.token_embedding_table(idx) # (batch, time, n_embd)
+        pos_emb = self.position_embedding_table(torch.arange(T, device=device)) # (time, n_embd)
+        x = tok_emb + pos_emb # (batch, time, n_embd)
+        logits = self.lm_head(x) # (batch, time, vocab_size)
         if targets is None:
             loss = None
         else:
@@ -96,7 +105,7 @@ class BigramLanguageModel(nn.Module):
             # append sampled index to the running sequence
             idx = torch.cat((idx, idx_next), dim=1) # (batch, time+1)
         return idx
-m = BigramLanguageModel(vocab_size)
+m = BigramLanguageModel()
 logits, loss = m(xb, yb)
 print(logits.shape)
 print(loss)
@@ -115,3 +124,50 @@ for steps in range(10000):
     optimizer.step()
 print(loss.item())
 print(decode(m.generate(idx = torch.zeros((1, 1), dtype=torch.long), max_new_tokens=500)[0].tolist()))
+
+
+
+# toy example illustrating how matrix multiplication can be used for a "weighted aggregation"
+torch.manual_seed(42)
+a = torch.tril(torch.ones(3, 3))
+a = a / torch.sum(a, 1, keepdim=True)
+b = torch.randint(0,10,(3,2)).float()
+c = a @ b
+print('a=')
+print(a)
+print('--')
+print('b=')
+print(b)
+print('--')
+print('c=')
+print(c)
+
+torch.manual_seed(1337)
+B,T,C = 4,8,2 # batch, time, channels
+x = torch.randn(B,T,C)
+x.shape
+
+# version 1: We want x[b,t] = mean_{i<=t} x[b,i]
+xbow = torch.zeros((B,T,C))
+for b in range(B):
+    for t in range(T):
+        xprev = x[b,:t+1] # (t,C)
+        xbow[b,t] = torch.mean(xprev, 0)
+
+# version 2: using matrix multiply for a weighted aggregation
+wei = torch.tril(torch.ones(T, T))
+wei = wei / wei.sum(1, keepdim=True)
+print(wei);
+xbow2 = wei @ x # (B, T, T) @ (B, T, C) ----> (B, T, C)
+print(torch.allclose(xbow, xbow2))
+print(xbow[0])
+print(xbow2[0])
+
+# version 3: use Softmax
+tril = torch.tril(torch.ones(T, T))
+wei = torch.zeros((T,T))
+wei = wei.masked_fill(tril == 0, float('-inf'))
+wei = F.softmax(wei, dim=-1)
+xbow3 = wei @ x
+print(xbow3[0])
+print(torch.allclose(xbow, xbow3))
